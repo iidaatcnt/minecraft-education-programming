@@ -1,0 +1,16 @@
+bat_cave: Position = None
+
+def on_on_chat():
+    global bat_cave
+    player.say("dig a cave!")
+    gameplay.time_set(gameplay.time(DAY))
+    for index in range(50):
+        blocks.fill(AIR, pos(-1, 0, -1), pos(1, 2, 1), FillOperation.REPLACE)
+    bat_cave = player.position()
+    player.say("You have 10 seconds to go out before the bats arrive!")
+    loops.pause(10000)
+    player.say("Watch for bats!")
+    gameplay.time_set(gameplay.time(DUSK))
+    for index2 in range(200):
+        mobs.spawn(BAT, bat_cave)
+player.on_chat("cave", on_on_chat)

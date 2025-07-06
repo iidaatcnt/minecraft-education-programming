@@ -1,0 +1,24 @@
+def on_travelled_riding():
+    mobs.apply_effect(NAUSEA, mobs.target(LOCAL_PLAYER), 10, 1)
+player.on_travelled(RIDING, on_travelled_riding)
+
+def on_item_interacted_apple():
+    mobs.clear_effect(mobs.target(LOCAL_PLAYER))
+player.on_item_interacted(APPLE, on_item_interacted_apple)
+
+def on_item_interacted_fishing_rod():
+    mobs.spawn(DOLPHIN, pos(2, 4, 0))
+    mobs.spawn(PUFFERFISH, pos(-2, 4, 0))
+    mobs.spawn(SALMON, pos(0, 4, 2))
+    mobs.spawn(TROPICAL_FISH, pos(0, 4, -2))
+    mobs.spawn(COD, pos(2, 4, 2))
+    mobs.spawn(SQUID, pos(-2, 4, -2))
+player.on_item_interacted(FISHING_ROD, on_item_interacted_fishing_rod)
+
+def on_item_interacted_boat():
+    gameplay.set_weather(CLEAR)
+    gameplay.time_set(gameplay.time(DAWN))
+player.on_item_interacted(BOAT, on_item_interacted_boat)
+
+player.say("Lets go fishing!")
+player.say("Get a boat and a fishing rod")

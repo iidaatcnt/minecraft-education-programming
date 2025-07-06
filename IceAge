@@ -1,0 +1,23 @@
+layers: List[number] = []
+bottomCorner: Position = None
+topCorner: Position = None
+rando: Position = None
+
+def on_item_interacted_trident():
+    global layers, bottomCorner, topCorner, rando
+    layers = [LAVA, GLASS, ICE]
+    bottomCorner = pos(10, 0, 10).to_world()
+    topCorner = positions.add(bottomCorner, pos(10, 10, 10))
+    index = 0
+    while index <= len(layers) - 1:
+        blocks.fill(layers[index],
+            positions.add(bottomCorner, pos(index, index, index)),
+            positions.add(topCorner, pos(0 - index, 0, 0 - index)),
+            FillOperation.REPLACE)
+        index += 1
+    for index2 in range(20):
+        rando = randpos(positions.add(bottomCorner, pos(2, 2, 2)),
+            positions.add(topCorner, pos(-2, 0, -2)))
+        blocks.place(WATER, rando)
+        mobs.spawn(TROPICAL_FISH, rando)
+player.on_item_interacted(TRIDENT, on_item_interacted_trident)
