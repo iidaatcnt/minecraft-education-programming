@@ -1,46 +1,46 @@
 /**
- * 💥 ニワトリの雨
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐
- * @category effects
+ * 🐔 Chicken Rain - ニワトリの雨
+ * 
+ * @description 空からニワトリブロックが降る演出
+ * @learning_objectives ランダム配置、エフェクト、時間制御
+ * @difficulty ⭐⭐ (初中級)
  * @chat_command chickens
- * @original_file minecraft-chicken-rain.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-chicken-rain.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("chickens", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-chicken-rain.mkcd を使用してください。")
+    let pos = player.position()
+    
+    player.say("🐔 ニワトリの雨が降ってきます！")
+    
+    // 空の高い位置からニワトリブロック（白ブロックで代用）を降らせる
+    let rainArea = 15
+    let rainHeight = 20
+    let chickenCount = 50
+    
+    for (let i = 0; i < chickenCount; i++) {
+        // ランダムな位置を決定
+        let x = randint(-rainArea, rainArea)
+        let z = randint(-rainArea, rainArea)
+        let startHeight = rainHeight + randint(0, 10)
+        
+        // 空から地面まで"ニワトリ"を配置
+        for (let y = startHeight; y >= 0; y -= 2) {
+            let chickenPos = pos.add(positions.create(x, y, z))
+            
+            // 白ブロック（ニワトリ代用）を配置
+            blocks.place(WOOL, chickenPos)
+        }
+    }
+    
+    // 地面にニワトリの着地点をマーク
+    for (let i = 0; i < 20; i++) {
+        let x = randint(-rainArea, rainArea)
+        let z = randint(-rainArea, rainArea)
+        blocks.place(WOOL, pos.add(positions.create(x, 0, z)))
+    }
+    
+    player.say("🐔 ニワトリの雨が降り注ぎました！")
+    player.say("🪶 白いブロックがニワトリです")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "chickens" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

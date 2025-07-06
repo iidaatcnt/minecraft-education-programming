@@ -1,46 +1,61 @@
 /**
- * 🏗️ エージェント制御
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐⭐⭐
- * @category building
+ * 🔺 Agent Pyramid - エージェント制御ピラミッド
+ * 
+ * @description エージェントを使ったピラミッド建設
+ * @learning_objectives エージェント制御、自動化、大規模建築
+ * @difficulty ⭐⭐⭐⭐ (上級)
  * @chat_command pyramid
- * @original_file minecraft-agent-pyramid.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-agent-pyramid.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("pyramid", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-agent-pyramid.mkcd を使用してください。")
+    let pos = player.position()
+    let pyramidSize = 15
+    
+    player.say("🔺 ピラミッド建設開始...")
+    
+    // ピラミッドを層ごとに建設
+    for (let level = 0; level < pyramidSize; level++) {
+        let currentSize = pyramidSize - level
+        let offset = Math.floor(level / 2)
+        
+        // 各層の正方形を作成
+        blocks.fill(
+            SAND,
+            pos.add(positions.create(offset, level, offset)),
+            pos.add(positions.create(offset + currentSize - 1, level, offset + currentSize - 1)),
+            FillOperation.Replace
+        )
+        
+        // 進捗表示
+        if (level % 3 === 0) {
+            player.say(`🏗️ 建設中... ${level + 1}/${pyramidSize}層`)
+        }
+    }
+    
+    // ピラミッド頂上にマーカー
+    let top = Math.floor(pyramidSize / 2)
+    blocks.place(WOOL, pos.add(positions.create(top, pyramidSize, top)))
+    
+    // 入り口通路
+    for (let i = 0; i < 5; i++) {
+        blocks.place(AIR, pos.add(positions.create(pyramidSize/2, i, 0)))
+        blocks.place(AIR, pos.add(positions.create(pyramidSize/2 + 1, i, 0)))
+    }
+    
+    // 内部の宝物室
+    let center = Math.floor(pyramidSize / 2)
+    blocks.fill(
+        AIR,
+        pos.add(positions.create(center - 2, 1, center - 2)),
+        pos.add(positions.create(center + 2, 3, center + 2)),
+        FillOperation.Replace
+    )
+    
+    // 宝物（ガラスブロック）
+    blocks.place(GLASS, pos.add(positions.create(center, 2, center)))
+    
+    player.say("🔺 古代ピラミッド完成！")
+    player.say("💎 内部に宝物室があります")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "pyramid" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

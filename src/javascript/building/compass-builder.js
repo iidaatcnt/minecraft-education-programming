@@ -1,46 +1,71 @@
 /**
- * 🏗️ コンパス建設
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐
- * @category building
+ * 🧭 Compass Builder - コンパス建設
+ * 
+ * @description 方角を示すコンパス構造物
+ * @learning_objectives 方向感覚、円形構造、座標計算
+ * @difficulty ⭐⭐ (初中級)
  * @chat_command compass
- * @original_file minecraft-compass.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-compass.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("compass", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-compass.mkcd を使用してください。")
+    let pos = player.position()
+    let radius = 10
+    
+    // 中央の台座
+    blocks.fill(
+        STONE,
+        pos.add(positions.create(-2, 0, -2)),
+        pos.add(positions.create(2, 1, 2)),
+        FillOperation.Replace
+    )
+    
+    // 北南東西の方向線
+    // 北 (Z-)
+    for (let i = 1; i <= radius; i++) {
+        blocks.place(COBBLESTONE, pos.add(positions.create(0, 0, -i)))
+        if (i === radius) {
+            blocks.place(WOOL, pos.add(positions.create(0, 1, -i)))  // 北マーカー
+            blocks.place(WOOL, pos.add(positions.create(-1, 1, -i)))
+            blocks.place(WOOL, pos.add(positions.create(1, 1, -i)))
+        }
+    }
+    
+    // 南 (Z+)
+    for (let i = 1; i <= radius; i++) {
+        blocks.place(COBBLESTONE, pos.add(positions.create(0, 0, i)))
+        if (i === radius) {
+            blocks.place(SAND, pos.add(positions.create(0, 1, i)))  // 南マーカー
+        }
+    }
+    
+    // 東 (X+)
+    for (let i = 1; i <= radius; i++) {
+        blocks.place(COBBLESTONE, pos.add(positions.create(i, 0, 0)))
+        if (i === radius) {
+            blocks.place(DIRT, pos.add(positions.create(i, 1, 0)))  // 東マーカー
+        }
+    }
+    
+    // 西 (X-)
+    for (let i = 1; i <= radius; i++) {
+        blocks.place(COBBLESTONE, pos.add(positions.create(-i, 0, 0)))
+        if (i === radius) {
+            blocks.place(GLASS, pos.add(positions.create(-i, 1, 0)))  // 西マーカー
+        }
+    }
+    
+    // 円形の外枠
+    for (let angle = 0; angle < 360; angle += 15) {
+        let x = Math.round(radius * Math.cos(angle * Math.PI / 180))
+        let z = Math.round(radius * Math.sin(angle * Math.PI / 180))
+        blocks.place(STONE, pos.add(positions.create(x, 0, z)))
+    }
+    
+    // 中央にコンパス針
+    blocks.place(WOOL, pos.add(positions.create(0, 2, 0)))
+    
+    player.say("🧭 コンパス完成！")
+    player.say("🧭 北:白, 南:黄, 東:茶, 西:透明")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "compass" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

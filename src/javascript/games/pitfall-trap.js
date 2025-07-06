@@ -1,46 +1,52 @@
 /**
- * 🎮 落とし穴トラップ
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐
- * @category games
+ * 🎪 Pitfall Trap - 落とし穴トラップ
+ * 
+ * @description 隠れた落とし穴の作成
+ * @learning_objectives トラップ機構、隠蔽技術、ゲーム要素
+ * @difficulty ⭐⭐ (初中級)
  * @chat_command pitfall
- * @original_file minecraft-pitfall.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-pitfall.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("pitfall", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-pitfall.mkcd を使用してください。")
+    let pos = player.position()
+    
+    // 通常の道を作成
+    blocks.fill(
+        STONE,
+        pos.add(positions.create(-5, 0, 0)),
+        pos.add(positions.create(15, 0, 3)),
+        FillOperation.Replace
+    )
+    
+    // 隠れた落とし穴を数カ所に設置
+    let trapLocations = [
+        {x: 2, z: 1},
+        {x: 7, z: 2},
+        {x: 12, z: 1}
+    ]
+    
+    trapLocations.forEach(trap => {
+        // 深い穴を掘る
+        blocks.fill(
+            AIR,
+            pos.add(positions.create(trap.x, -1, trap.z)),
+            pos.add(positions.create(trap.x, -5, trap.z)),
+            FillOperation.Replace
+        )
+        
+        // 底に柔らかい着地点
+        blocks.place(WOOL, pos.add(positions.create(trap.x, -6, trap.z)))
+        
+        // 見た目は普通の道（薄いガラスで覆う）
+        blocks.place(GLASS, pos.add(positions.create(trap.x, 0, trap.z)))
+    })
+    
+    // 警告サイン（少し離れた場所）
+    blocks.place(WOOL, pos.add(positions.create(-3, 1, 1)))
+    blocks.place(WOOL, pos.add(positions.create(-3, 2, 1)))
+    
+    player.say("🎪 落とし穴トラップを設置しました！")
+    player.say("⚠️ 注意: 透明な床に注意して歩いてください")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "pitfall" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

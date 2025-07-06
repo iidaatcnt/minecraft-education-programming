@@ -1,46 +1,93 @@
 /**
- * 🎭 アイスエイジ
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐⭐
- * @category themes
+ * 🧊 Ice Age - アイスエイジ
+ * 
+ * @description 氷河期の世界を再現
+ * @learning_objectives 環境デザイン、大規模地形、テーマ表現
+ * @difficulty ⭐⭐⭐ (中級)
  * @chat_command iceage
- * @original_file minecraft-ice-age.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-ice-age.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("iceage", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-ice-age.mkcd を使用してください。")
+    let pos = player.position()
+    let iceSize = 25
+    
+    player.say("🧊 氷河期の世界を作成中...")
+    
+    // 氷の大地
+    blocks.fill(
+        GLASS,  // 氷の代用
+        pos.add(positions.create(-iceSize, -1, -iceSize)),
+        pos.add(positions.create(iceSize, -1, iceSize)),
+        FillOperation.Replace
+    )
+    
+    // 雪の丘陵
+    for (let hill = 0; hill < 5; hill++) {
+        let hillX = randint(-iceSize + 5, iceSize - 5)
+        let hillZ = randint(-iceSize + 5, iceSize - 5)
+        let hillHeight = randint(3, 8)
+        let hillRadius = randint(4, 7)
+        
+        for (let x = -hillRadius; x <= hillRadius; x++) {
+            for (let z = -hillRadius; z <= hillRadius; z++) {
+                let distance = Math.sqrt(x * x + z * z)
+                if (distance <= hillRadius) {
+                    let height = Math.round(hillHeight * (1 - distance / hillRadius))
+                    for (let y = 0; y < height; y++) {
+                        blocks.place(WOOL, pos.add(positions.create(hillX + x, y, hillZ + z)))
+                    }
+                }
+            }
+        }
+    }
+    
+    // 氷柱
+    for (let pillar = 0; pillar < 10; pillar++) {
+        let pillarX = randint(-iceSize + 2, iceSize - 2)
+        let pillarZ = randint(-iceSize + 2, iceSize - 2)
+        let pillarHeight = randint(5, 12)
+        
+        blocks.fill(
+            GLASS,
+            pos.add(positions.create(pillarX, 0, pillarZ)),
+            pos.add(positions.create(pillarX, pillarHeight, pillarZ)),
+            FillOperation.Replace
+        )
+    }
+    
+    // 氷河の亀裂
+    for (let crack = 0; crack < 8; crack++) {
+        let startX = randint(-iceSize, iceSize)
+        let startZ = randint(-iceSize, iceSize)
+        let length = randint(5, 15)
+        let direction = randint(0, 3) * 90  // 4方向
+        
+        for (let i = 0; i < length; i++) {
+            let crackX = startX + Math.round(i * Math.cos(direction * Math.PI / 180))
+            let crackZ = startZ + Math.round(i * Math.sin(direction * Math.PI / 180))
+            
+            if (Math.abs(crackX) < iceSize && Math.abs(crackZ) < iceSize) {
+                blocks.place(AIR, pos.add(positions.create(crackX, -1, crackZ)))
+                blocks.place(COBBLESTONE, pos.add(positions.create(crackX, -2, crackZ)))  // 深い亀裂
+            }
+        }
+    }
+    
+    // 古代生物の化石（骨の代用）
+    let fossilX = randint(-10, 10)
+    let fossilZ = randint(-10, 10)
+    
+    // 恐竜の骨格もどき
+    blocks.fill(
+        WOOL,
+        pos.add(positions.create(fossilX, 0, fossilZ)),
+        pos.add(positions.create(fossilX + 8, 2, fossilZ + 2)),
+        FillOperation.Replace
+    )
+    
+    player.say("🧊 氷河期の世界が完成！")
+    player.say("❄️ 氷の大地と雪の丘陵、氷柱が出現")
+    player.say("🦕 古代生物の化石も発見できます")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "iceage" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

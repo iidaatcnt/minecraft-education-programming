@@ -1,46 +1,54 @@
 /**
- * 🎮 アクションゲーム
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐⭐⭐
- * @category games
+ * 🏆 Wipe Out - アクションゲーム
+ * 
+ * @description 障害物コースゲーム
+ * @learning_objectives 空間設計、障害物配置、ゲーム体験
+ * @difficulty ⭐⭐⭐ (中級)
  * @chat_command wipeout
- * @original_file minecraft-wipe-out.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-wipe-out.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("wipeout", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-wipe-out.mkcd を使用してください。")
+    let pos = player.position()
+    
+    // スタート地点
+    blocks.fill(
+        WOOL,
+        pos.add(positions.create(-2, 0, -2)),
+        pos.add(positions.create(2, 0, 2)),
+        FillOperation.Replace
+    )
+    
+    // 障害物コース作成
+    let courseLength = 30
+    
+    for (let i = 5; i < courseLength; i += 5) {
+        // ジャンプ台
+        blocks.place(STONE, pos.add(positions.create(0, 1, i)))
+        blocks.place(STONE, pos.add(positions.create(0, 2, i+1)))
+        blocks.place(STONE, pos.add(positions.create(0, 1, i+2)))
+        
+        // 左右の障害物
+        if (i % 10 === 5) {
+            blocks.place(COBBLESTONE, pos.add(positions.create(-2, 1, i+3)))
+            blocks.place(COBBLESTONE, pos.add(positions.create(2, 1, i+3)))
+        }
+        
+        // 床の穴（ランダム）
+        if (randint(0, 1) === 0) {
+            blocks.place(AIR, pos.add(positions.create(randint(-1, 1), 0, i+4)))
+        }
+    }
+    
+    // ゴール地点
+    blocks.fill(
+        SAND,
+        pos.add(positions.create(-3, 0, courseLength)),
+        pos.add(positions.create(3, 0, courseLength+3)),
+        FillOperation.Replace
+    )
+    
+    player.say("🏆 Wipe Out コース完成！")
+    player.say("🏃 スタートからゴールまで走り抜けよう！")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "wipeout" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了

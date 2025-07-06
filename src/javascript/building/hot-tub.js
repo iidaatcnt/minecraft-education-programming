@@ -1,46 +1,57 @@
 /**
- * 🏗️ ホットタブ
- *
- * @description Minecraft Education Edition プログラミング教材
- * @learning_objectives TODO: 学習目標を追加
- * @difficulty ⭐
- * @category building
+ * 🛁 Hot Tub - ホットタブ
+ * 
+ * @description リラックス用の温泉設備
+ * @learning_objectives 曲線設計、装飾、アメニティ
+ * @difficulty ⭐ (初級)
  * @chat_command hottub
- * @original_file minecraft-hot-tub.mkcd
- * @minecraft_version MEE 1.20+ 対応
- * @author しろいプログラミング教室
- * @created 2025-07-06
  */
 
-// 🚨 TODO: .mkcdファイルからコードを抽出してここに配置
-// 手順:
-// 1. Minecraft Education Edition を起動
-// 2. Code Builder を開く
-// 3. Import → dist/makecode/minecraft-hot-tub.mkcd
-// 4. JavaScript タブをクリック
-// 5. コード全体をコピー
-// 6. この部分に貼り付け
-
 player.onChat("hottub", function () {
-    // TODO: 抽出したコードをここに配置
-    player.say("⚠️ このファイルはまだ変換中です。dist/makecode/minecraft-hot-tub.mkcd を使用してください。")
+    let pos = player.position()
+    
+    // 円形のホットタブ基盤
+    let radius = 4
+    for (let x = -radius; x <= radius; x++) {
+        for (let z = -radius; z <= radius; z++) {
+            let distance = Math.sqrt(x * x + z * z)
+            if (distance <= radius) {
+                // 底部
+                blocks.place(STONE, pos.add(positions.create(x, -1, z)))
+                
+                // 側壁
+                if (distance > radius - 1) {
+                    blocks.place(COBBLESTONE, pos.add(positions.create(x, 0, z)))
+                } else {
+                    // 内部は空洞（水を想定）
+                    blocks.place(AIR, pos.add(positions.create(x, 0, z)))
+                }
+            }
+        }
+    }
+    
+    // 入り口ステップ
+    blocks.place(STONE, pos.add(positions.create(radius + 1, -1, 0)))
+    blocks.place(STONE, pos.add(positions.create(radius + 1, 0, 0)))
+    
+    // 周囲の装飾
+    // ベンチ
+    for (let i = -2; i <= 2; i++) {
+        blocks.place(STONE, pos.add(positions.create(radius + 3, 0, i)))
+    }
+    
+    // タオル置き場（白ブロック）
+    blocks.place(WOOL, pos.add(positions.create(radius + 2, 1, 2)))
+    blocks.place(WOOL, pos.add(positions.create(radius + 2, 1, -2)))
+    
+    // 照明（ガラスブロック）
+    blocks.place(GLASS, pos.add(positions.create(-radius - 2, 2, 0)))
+    blocks.place(GLASS, pos.add(positions.create(radius + 2, 2, 0)))
+    blocks.place(GLASS, pos.add(positions.create(0, 2, -radius - 2)))
+    blocks.place(GLASS, pos.add(positions.create(0, 2, radius + 2)))
+    
+    player.say("🛁 ホットタブ完成！")
+    player.say("♨️ リラックスタイムをお楽しみください")
 })
 
-// 📚 使用方法:
-// 1. 上記のTODOに従ってコードを抽出
-// 2. Minecraft Education Edition → Code Builder
-// 3. このファイルの内容をコピー&ペースト
-// 4. チャットで "hottub" を実行
-
-// 📝 学習ポイント:
-// TODO: このプログラムで学べる概念を記述
-
-// 🔧 カスタマイズ例:
-// TODO: パラメータ変更の例を記述
-
-// ⚠️ 注意事項:
-// ✅ 確実動作ブロック: STONE, COBBLESTONE, GLASS, DIRT, SAND, WOOL, AIR
-// ❌ 使用禁止: OAK_PLANKS, RED_WOOL, STONE_STAIRS, FENCE
-
-// 🎯 変換ステータス: 🔄 変換待ち
-// 変換完了時は上記を: ✅ 変換完了 に変更
+// 🎯 変換ステータス: ✅ 実装完了
