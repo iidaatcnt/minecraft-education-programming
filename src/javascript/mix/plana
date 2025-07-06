@@ -1,0 +1,134 @@
+player.onChat("rainbow", function () {
+    // 虹の色を配列で定義
+    let colors = [
+        Block.RedWool,      // 赤
+        Block.OrangeWool,   // オレンジ
+        Block.YellowWool,   // 黄色
+        Block.LimeWool,     // 黄緑（緑の代用）
+        Block.BlueWool,     // 青
+        Block.PurpleWool,   // 紫
+        Block.PinkWool      // ピンク
+    ]
+
+    // プレイヤーの位置を取得
+    let pos = player.position()
+
+    // 各色で虹の層を作る
+    for (let i = 0; i < colors.length; i++) {
+        // 半円を描く
+        for (let x = -10; x <= 10; x++) {
+            let y = Math.round(Math.sqrt(100 - x * x)) - i
+            if (y >= 0) {
+                blocks.place(colors[i], pos.add(positions.create(x, y + 10, 5)))
+            }
+        }
+    }
+
+    player.say("虹ができました！")
+})
+player.onChat("house", function () {
+    // プレイヤーの位置を取得
+    let startPos = player.position()
+
+    // 家の土台を作る
+    blocks.fill(
+        STONE,
+        startPos,
+        startPos.add(positions.create(9, 0, 9)),
+        FillOperation.Replace
+    )
+
+    // 壁を作る（空洞を作るために2回に分ける）
+    // 外壁
+    blocks.fill(
+        COBBLESTONE,
+        startPos.add(positions.create(0, 1, 0)),
+        startPos.add(positions.create(9, 4, 9)),
+        FillOperation.Replace
+    )
+
+    // 内部を空洞にする
+    blocks.fill(
+        AIR,
+        startPos.add(positions.create(1, 1, 1)),
+        startPos.add(positions.create(8, 3, 8)),
+        FillOperation.Replace
+    )
+
+    // 屋根を作る
+    for (let i = 0; i < 5; i++) {
+        blocks.fill(
+            WOOL,
+            startPos.add(positions.create(i, 5 + i, i)),
+            startPos.add(positions.create(9 - i, 5 + i, 9 - i)),
+            FillOperation.Replace
+        )
+    }
+
+    // ドアを作る
+    blocks.place(AIR, startPos.add(positions.create(4, 1, 0)))
+    blocks.place(AIR, startPos.add(positions.create(4, 2, 0)))
+
+    // 窓を作る
+    blocks.place(GLASS, startPos.add(positions.create(2, 2, 0)))
+    blocks.place(GLASS, startPos.add(positions.create(6, 2, 0)))
+
+    player.say("家が完成しました！")
+})
+player.onChat("flowers", function () {
+    let pos = player.position()
+
+    // 地面を草ブロックにする
+    blocks.fill(
+        DIRT,
+        pos.add(positions.create(-10, -1, -10)),
+        pos.add(positions.create(10, -1, 10)),
+        FillOperation.Replace
+    )
+
+    // ランダムに花を植える
+    for (let i = 0; i < 50; i++) {
+        // ランダムな位置を決める
+        let x = randint(-10, 10)
+        let z = randint(-10, 10)
+        let flowerPos = pos.add(positions.create(x, 0, z))
+
+        // ランダムに花の種類を選ぶ
+        let flowerType = randint(1, 4)
+
+        if (flowerType == 1) {
+            blocks.place(WOOL, flowerPos)
+        } else if (flowerType == 2) {
+            blocks.place(SAND, flowerPos)
+        } else if (flowerType == 3) {
+            blocks.place(STONE, flowerPos)
+        } else {
+            blocks.place(COBBLESTONE, flowerPos)
+        }
+    }
+
+    player.say("きれいなお花畑ができました！")
+})
+player.onChat("stairs", function () {
+    let pos = player.position()
+
+    // 上向きの階段を作る
+    for (let i = 0; i < 10; i++) {
+        // 各段の位置を計算
+        let stepPos = pos.add(positions.create(i, i, 0))
+
+        // 段を作る（幅3ブロック）
+        blocks.fill(
+            COBBLESTONE,
+            stepPos.add(positions.create(0, 0, -1)),
+            stepPos.add(positions.create(0, 0, 1)),
+            FillOperation.Replace
+        )
+
+        // 手すりを作る
+        blocks.place(COBBLESTONE, stepPos.add(positions.create(0, 1, -2)))
+        blocks.place(COBBLESTONE, stepPos.add(positions.create(0, 1, 2)))
+    }
+
+    player.say("階段ができました！")
+})
